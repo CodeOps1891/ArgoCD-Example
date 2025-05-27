@@ -1,0 +1,33 @@
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: ticketingsystem-web-scaler-cpu
+  namespace: backend  # Change if your deployment is in another namespace
+spec:
+  scaleTargetRef:
+    name: ticketingsystem-web  # Name of your deployment
+  minReplicaCount: 1
+  maxReplicaCount: 5  # Adjust as needed
+  cooldownPeriod: 10  # Time (in seconds) before scaling down
+  pollingInterval: 5  # Check cpu usage every 5 seconds
+  advanced:
+    restoreToOriginalReplicaCount: true
+    horizontalPodAutoscalerConfig:
+      behavior:
+        scaleDown:
+          stabilizationWindowSeconds: 60  # Ensures replicas are not removed too quickly
+          policies:
+            - type: Percent
+              value: 10
+              periodSeconds: 15  # Reduce pods by 10% every 15 seconds
+        scaleUp:
+          stabilizationWindowSeconds: 30  # Prevents excessive scaling up
+          policies:
+            - type: Percent
+              value: 50
+              periodSeconds: 10
+  triggers:
+    - type: cpu
+      metadata:
+        type: "Utilization"
+        value: "80"  # Scale up when cpu usage is above 80%

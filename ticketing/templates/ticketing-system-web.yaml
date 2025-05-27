@@ -1,0 +1,101 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ticketingsystem-web
+  namespace: {{ .Values.config.namespace }}
+  annotations:
+    alb.ingress.kubernetes.io/healthcheck-path: '/ticketing/healthcheck'
+spec:
+  selector:
+    app: ticketingsystem-web
+  ports:
+    - protocol: TCP
+      port: 8018
+      targetPort: 8018
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ticketingsystem-web
+  namespace: {{ .Values.config.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: ticketingsystem-web
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ticketingsystem-web
+        env: {{ .Values.config.environment }}
+      annotations:
+        ad.datadoghq.com/ticketingsystem-web.logs: |
+          [{
+            "source": "ticketingsystem-web",
+            "service": "ticketingsystem-web",
+            "tags": ["env:{{ .Values.config.environment }}", "project:scaleops"]
+          }]
+    spec:
+      serviceAccountName: {{ .Values.config.serviceAccountName }}
+      tolerations:
+        {{- toYaml .Values.tolerations | nindent 8 }}
+      nodeSelector:
+        {{- toYaml .Values.nodeSelector | nindent 8 }}
+      affinity:
+        {{- toYaml .Values.affinity | nindent 8 }}
+      volumes:
+      - name: aws-secrets-store
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: aws-secrets
+      containers:
+      - name: ticketingsystem-web
+        image: "{{ .Values.image.repository }}:latest"
+        imagePullPolicy: Always
+        volumeMounts:
+        - name: aws-secrets-store
+          mountPath: "/tmp/secrets-store"
+          readOnly: true
+        resources:
+          requests:
+            memory: "{{ .Values.resources.requests.memory }}"
+            cpu: "{{ .Values.resources.requests.cpu }}"
+          limits:
+            memory: "{{ .Values.resources.limits.memory }}"
+            cpu: "{{ .Values.resources.limits.cpu }}"
+        ports:
+        - containerPort: 8018
+        env:
+          {{- range .Values.env }}
+          - name: {{ .name }}
+            value: {{ .value }}
+          {{- end }}
+          
+          {{- range .Values.secret }}
+          - name: {{ .name }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ .valueFrom.secretKeyRef.name }}
+                key: {{ .valueFrom.secretKeyRef.key }}
+          {{- end }}
+        command: ["/bin/sh","-c"]
+        args: ["python manage.py migrate && python manage.py collectstatic --noinput && gunicorn --bind :8018 --statsd-host localhost:8125 --name ticketing-gunicorn --log-level debug --workers $(( 2 * `cat /proc/cpuinfo | grep 'core id' | wc -l` + 1 )) --threads $(( 2 * `cat /proc/cpuinfo | grep 'core id' | wc -l` + 1 )) --timeout 90 ticketing_system.wsgi"]
+        livenessProbe:
+          httpGet:
+            path: /ticketing/healthcheck  
+            port: 8018
+          initialDelaySeconds: 60 
+          periodSeconds: 60      
+          timeoutSeconds: 10       
+          failureThreshold: 3  
+        readinessProbe:
+          httpGet:
+            path: /ticketing/healthcheck  
+            port: 8018
+          initialDelaySeconds: 60
+          periodSeconds: 10
+          timeoutSeconds: 30
+          failureThreshold: 3
+          successThreshold: 1
