@@ -1,0 +1,31 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ticketing-system-dev
+  namespace: argocd
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/CodeOps1891/ArgoCD-Example.git  # Your Git repo
+    targetRevision: main  # Git branch for dev
+    path: ticketing  # Path to your Helm chart
+    helm:
+      valueFiles:
+        - ../values.yaml  # Use dev-specific values
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: backend
+  syncPolicy:
+    automated:
+      prune: true       # Remove resources that are no longer in Git
+      selfHeal: true    # Auto-fix any manual changes
+    syncOptions:
+      - CreateNamespace=true  # Create namespace if it doesn't exist
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m
