@@ -2,7 +2,7 @@
 # values-dev.yaml
 image:
   repository: 059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
-  tag: latest  # This will be updated automatically by ArgoCD Image Updater
+  tag: d8e63aa  # This will be updated automatically by ArgoCD Image Updater
   pullPolicy: Always
 
 config:
