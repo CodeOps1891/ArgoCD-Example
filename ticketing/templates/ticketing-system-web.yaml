@@ -52,7 +52,7 @@ spec:
             secretProviderClass: aws-secrets
       containers:
       - name: ticketingsystem-web
-        image: "{{ .Values.image.repository }}:latest"
+        image: "{{ .Values.image.repository }}:d8e63aa"
         imagePullPolicy: Always
         volumeMounts:
         - name: aws-secrets-store
