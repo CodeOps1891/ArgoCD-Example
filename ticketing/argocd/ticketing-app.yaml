@@ -11,28 +11,30 @@ metadata:
     argocd-image-updater.argoproj.io/ticketing.helm.image-name: image.repository
     argocd-image-updater.argoproj.io/ticketing.helm.image-tag: image.tag
     argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/write-back-target: values.yaml
     argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/git-repository: https://github.com/CodeOps1891/ArgoCD-Example.git
     argocd-image-updater.argoproj.io/git-commit-message: "build: automatic update of ticketing-system-dev image to {{.NewTag}}"
 
 
 spec:
   project: default
   source:
-    repoURL: https://github.com/CodeOps1891/ArgoCD-Example.git  # Your Git repo
-    targetRevision: main  # Git branch for dev
-    path: ticketing  # Path to your Helm chart
+    repoURL: https://github.com/CodeOps1891/ArgoCD-Example.git
+    targetRevision: main
+    path: ticketing
     helm:
       valueFiles:
-        - ./values.yaml  # Use dev-specific values
+        - ./values.yaml
   destination:
     server: https://kubernetes.default.svc
     namespace: backend
   syncPolicy:
     automated:
-      prune: true       # Remove resources that are no longer in Git
-      selfHeal: true    # Auto-fix any manual changes
+      prune: true
+      selfHeal: true
     syncOptions:
-      - CreateNamespace=true  # Create namespace if it doesn't exist
+      - CreateNamespace=true
     retry:
       limit: 5
       backoff:

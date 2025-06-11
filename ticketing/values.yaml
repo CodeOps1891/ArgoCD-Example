@@ -327,6 +327,11 @@ secret:
       secretKeyRef:
         name: aws-secrets
         key: SCALEOPS_IDP_URL
+
+imageUpdater:
+  enabled: true
+  strategy: newest-build
+  policy: major
 ---
 
 # image:
