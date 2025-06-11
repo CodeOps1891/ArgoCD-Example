@@ -330,7 +330,7 @@ secret:
 
 imageUpdater:
   enabled: true
-  strategy: newest-build
+  strategy: semvar
   policy: major
 ---
 
