@@ -6,11 +6,13 @@ metadata:
   annotations:
     # ArgoCD Image Updater annotations
     argocd-image-updater.argoproj.io/image-list: ticketing=059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
-    argocd-image-updater.argoproj.io/ticketing.update-strategy: latest
+    argocd-image-updater.argoproj.io/ticketing.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/ticketing.allow-tags: regexp:^[a-f0-9]{7,40}$
     argocd-image-updater.argoproj.io/ticketing.helm.image-name: image.repository
     argocd-image-updater.argoproj.io/ticketing.helm.image-tag: image.tag
     argocd-image-updater.argoproj.io/write-back-method: git
     argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/git-commit-message: "build: automatic update of ticketing-system-dev image to {{.NewTag}}"
 
 
 spec:
