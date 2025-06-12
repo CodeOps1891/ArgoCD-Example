@@ -4,7 +4,7 @@ helm:
     value: 059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
     forcestring: true
   - name: image.tag
-    value: ff738d4
+    value: c4f9158
     forcestring: true
   - name: image.repository
     value: 059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
