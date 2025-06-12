@@ -33,10 +33,6 @@ authScripts:
 securityContext:
   readOnlyRootFilesystem: false
 
-extraEnv:
-  - name: AWS_REGION
-    value: "us-east-1"
-
 serviceAccount:
   create: true
   annotations:

@@ -4,13 +4,27 @@ metadata:
   name: ticketing-system-dev
   namespace: argocd
   annotations:
+    # argocd-image-updater.argoproj.io/image-list: ticketing=059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
+    # argocd-image-updater.argoproj.io/ticketing.update-strategy: newest-build
+    # # argocd-image-updater.argoproj.io/ticketing.write-update: 'true'
+    # argocd-image-updater.argoproj.io/ticketing.write-back-target: ticketing/values.yaml
+    # argocd-image-updater.argoproj.io/ticketing.write-back-method: git:secret:argocd/argocd-image-updater-git
+    # argocd-image-updater.argoproj.io/ticketing.git-branch: main
+    # argocd-image-updater.argoproj.io/ticketing.match-tag: '[0-9a-f]{7}'
+
     argocd-image-updater.argoproj.io/image-list: ticketing=059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
     argocd-image-updater.argoproj.io/ticketing.update-strategy: newest-build
-    # argocd-image-updater.argoproj.io/ticketing.write-update: 'true'
-    argocd-image-updater.argoproj.io/ticketing.write-back-target: ticketing/values.yaml
-    argocd-image-updater.argoproj.io/ticketing.write-back-method: git:secret:argocd/argocd-image-updater-git
-    argocd-image-updater.argoproj.io/ticketing.git-branch: main
-    argocd-image-updater.argoproj.io/ticketing.match-tag: '[0-9a-f]{7}'
+    argocd-image-updater.argoproj.io/write-back-method: git
+    argocd-image-updater.argoproj.io/git-repository: https://github.com/CodeOps1891/ArgoCD-Example.git
+    argocd-image-updater.argoproj.io/git-branch: main
+    argocd-image-updater.argoproj.io/ticketing.helm.image-name: image.repository
+    argocd-image-updater.argoproj.io/ticketing.helm.image-tag: image.tag
+    # Force write-back even if no changes in live spec
+    argocd-image-updater.argoproj.io/ticketing.force-update: "true"
+    # Match your 7-character commit hash pattern
+    argocd-image-updater.argoproj.io/ticketing.allow-tags: regexp:^[0-9a-f]{7}$
+
+    
 spec:
   project: default
   source:
