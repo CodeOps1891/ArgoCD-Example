@@ -2,7 +2,7 @@
 # values-dev.yaml
 image:
   repository: 059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
-  tag: latest  # This will be updated automatically by ArgoCD Image Updater
+  tag: 47fbda4 # Initial commit ID tag
   pullPolicy: Always
 
 config:
@@ -93,11 +93,6 @@ secret:
       secretKeyRef:
         name: aws-secrets
         key: SCALEOPS_IDP_URL
-
-imageUpdater:
-enabled: true
-strategy: newest-build
-policy: major
 ---
 
 # image:
@@ -232,107 +227,107 @@ policy: major
 # //**************************************
 
 
-/*
----
-image:
-  repository: 059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
-  tag: latest  # This will be updated automatically by ArgoCD Image Updater
-  pullPolicy: Always
 
-config:
-  environment: dev
-  namespace: backend
-  serviceAccountName: adminaccess-backend
+# ---
+# image:
+#   repository: 059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
+#   tag: latest  # This will be updated automatically by ArgoCD Image Updater
+#   pullPolicy: Always
 
-resources:
-  requests:
-    memory: "768Mi"
-    cpu: "250m"
-  limits:
-    memory: "1024Mi"
-    cpu: "250m"
+# config:
+#   environment: dev
+#   namespace: backend
+#   serviceAccountName: adminaccess-backend
 
-affinity:
-  nodeAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      nodeSelectorTerms:
-        - matchExpressions:
-          - key: backend
-            operator: In
-            values:
-            - exists
+# resources:
+#   requests:
+#     memory: "768Mi"
+#     cpu: "250m"
+#   limits:
+#     memory: "1024Mi"
+#     cpu: "250m"
 
-nodeSelector: {}
-tolerations: []
+# affinity:
+#   nodeAffinity:
+#     requiredDuringSchedulingIgnoredDuringExecution:
+#       nodeSelectorTerms:
+#         - matchExpressions:
+#           - key: backend
+#             operator: In
+#             values:
+#             - exists
 
-env:
-  - name: DJANGO_SETTINGS_MODULE
-    value: "ticketing_system.settings"
-  - name: ENV
-    value: "dev"
+# nodeSelector: {}
+# tolerations: []
 
-secret:
-  - name: DATABASE_NAME
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_DATABASE_NAME
-  - name: DATABASE_USER
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_DATABASE_USER
-  - name: DATABASE_PASSWORD
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_DATABASE_PASSWORD
-  - name: RABBITMQ_HOST
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_RABBITMQ_HOST
-  - name: NO_SQL_HOST
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_NO_SQL_HOST
-  - name: DATABASE_HOST
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_DATABASE_HOST
-  - name: NO_SQL_ROUTER_NAME
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_NO_SQL_ROUTER_NAME
-  - name: NO_SQL_DATABASE_NAME
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_NO_SQL_DATABASE_NAME
-  - name: REPORTS_BUCKET
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_EXPORT_LOGS_BUCKET
-  - name: ATTACHMENT_BUCKET
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_ATTACHMENT_BUCKET
-  - name: IDP_URL
-    valueFrom:
-      secretKeyRef:
-        name: aws-secrets
-        key: SCALEOPS_IDP_URL
+# env:
+#   - name: DJANGO_SETTINGS_MODULE
+#     value: "ticketing_system.settings"
+#   - name: ENV
+#     value: "dev"
 
-imageUpdater:
-  enabled: true
-  strategy: semvar
-  policy: major
----
+# secret:
+#   - name: DATABASE_NAME
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_DATABASE_NAME
+#   - name: DATABASE_USER
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_DATABASE_USER
+#   - name: DATABASE_PASSWORD
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_DATABASE_PASSWORD
+#   - name: RABBITMQ_HOST
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_RABBITMQ_HOST
+#   - name: NO_SQL_HOST
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_NO_SQL_HOST
+#   - name: DATABASE_HOST
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_DATABASE_HOST
+#   - name: NO_SQL_ROUTER_NAME
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_NO_SQL_ROUTER_NAME
+#   - name: NO_SQL_DATABASE_NAME
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_NO_SQL_DATABASE_NAME
+#   - name: REPORTS_BUCKET
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_EXPORT_LOGS_BUCKET
+#   - name: ATTACHMENT_BUCKET
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_ATTACHMENT_BUCKET
+#   - name: IDP_URL
+#     valueFrom:
+#       secretKeyRef:
+#         name: aws-secrets
+#         key: SCALEOPS_IDP_URL
+
+# imageUpdater:
+#   enabled: true
+#   strategy: semvar
+#   policy: major
+# ---
 
 # image:
 #   repository: 059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
@@ -461,4 +456,3 @@ imageUpdater:
 #   value: "059516066038-compliancex-ticketing-attachment"
 # - name: IDP_URL
 #   value: "https://idp.app.litmusscale.com"
-*/

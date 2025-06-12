@@ -52,7 +52,7 @@ spec:
             secretProviderClass: aws-secrets
       containers:
       - name: ticketingsystem-web
-        image: "{{ .Values.image.repository }}:d8e63aa"
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
         imagePullPolicy: Always
         volumeMounts:
         - name: aws-secrets-store
@@ -72,7 +72,6 @@ spec:
           - name: {{ .name }}
             value: {{ .value }}
           {{- end }}
-          
           {{- range .Values.secret }}
           - name: {{ .name }}
             valueFrom:
@@ -88,11 +87,11 @@ spec:
             port: 8018
           initialDelaySeconds: 60 
           periodSeconds: 60      
-          timeoutSeconds: 10       
-          failureThreshold: 3  
+          timeoutSeconds: 10
+          failureThreshold: 3
         readinessProbe:
           httpGet:
-            path: /ticketing/healthcheck  
+            path: /ticketing/healthcheck
             port: 8018
           initialDelaySeconds: 60
           periodSeconds: 10

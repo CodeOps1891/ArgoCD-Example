@@ -4,21 +4,16 @@ metadata:
   name: ticketing-system-dev
   namespace: argocd
   annotations:
-    # ArgoCD Image Updater annotations
     argocd-image-updater.argoproj.io/image-list: ticketing=059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
-    aargocd-image-updater.argoproj.io/ticketing.update-strategy: semver
-    argocd-image-updater.argoproj.io/ticketing.helm.image-name: image.repository
-    argocd-image-updater.argoproj.io/ticketing.helm.image-tag: image.tag
-    argocd-image-updater.argoproj.io/write-back-method: git
-    argocd-image-updater.argoproj.io/write-back-target: values.yaml
-    argocd-image-updater.argoproj.io/git-branch: main
-
-
+    argocd-image-updater.argoproj.io/ticketing.update-strategy: newest-build
+    argocd-image-updater.argoproj.io/ticketing.write-update: true
+    argocd-image-updater.argoproj.io/ticketing.write-path: ticketing/values.yaml
+    argocd-image-updater.argoproj.io/ticketing.git-branch: main
 spec:
   project: default
   source:
     repoURL: https://github.com/CodeOps1891/ArgoCD-Example.git
-    targetRevision: HEAD
+    targetRevision: main
     path: ticketing
     helm:
       valueFiles:
