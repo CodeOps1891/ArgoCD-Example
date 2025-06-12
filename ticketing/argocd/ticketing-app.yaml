@@ -6,7 +6,7 @@ metadata:
   annotations:
     argocd-image-updater.argoproj.io/image-list: ticketing=059516066038.dkr.ecr.us-east-1.amazonaws.com/ticketingsystem
     argocd-image-updater.argoproj.io/ticketing.update-strategy: newest-build
-    argocd-image-updater.argoproj.io/ticketing.write-update: true
+    argocd-image-updater.argoproj.io/ticketing.write-update: "true"
     argocd-image-updater.argoproj.io/ticketing.write-path: ticketing/values.yaml
     argocd-image-updater.argoproj.io/ticketing.git-branch: main
 spec:

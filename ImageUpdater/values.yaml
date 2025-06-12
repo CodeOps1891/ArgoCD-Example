@@ -16,9 +16,6 @@ config:
     insecure: no
     credentials: ext:/scripts/ecr-login.sh  #script name should match here and in authScripts 
     credsexpire: 11h
-    tags:
-      ignore:
-        - latest
   git:
     user: CodeOps1891 # Replace with your GitHub username
     email: abdul.rehman@eurustechnologies.com # Replace with your email
