@@ -20,7 +20,12 @@ config:
     user: CodeOps1891 # Replace with your GitHub username
     email: abdul.rehman@eurustechnologies.com # Replace with your email
     credentials: secret:argocd/argocd-image-updater-git
-    
+  repositories:
+  - name: github-repo
+    url: https://github.com/CodeOps1891/ArgoCD-Example.git
+    username: CodeOps1891
+    password: secret:argocd/argocd-image-updater-git
+
 
 authScripts:
   enabled: true
